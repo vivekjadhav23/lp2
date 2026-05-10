@@ -1,0 +1,115 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <set>
+#include <cmath>
+
+using namespace std;
+
+struct Node {
+    vector<vector<int>> mat;
+    int x, y;
+    int cost;
+    int level;
+
+    bool operator>(const Node& other) const {
+        return (cost + level) > (other.cost + other.level);
+    }
+};
+
+vector<vector<int>> goal = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 0}
+};
+
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
+
+int calculateCost(vector<vector<int>>& mat) {
+    int count = 0;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (mat[i][j] && mat[i][j] != goal[i][j]) {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
+bool isSafe(int x, int y) {
+    return (x >= 0 && x < 3 && y >= 0 && y < 3);
+}
+
+void printMatrix(vector<vector<int>>& mat) {
+    for (auto row : mat) {
+        for (auto val : row) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void solve(vector<vector<int>> initial, int x, int y) {
+    priority_queue<Node, vector<Node>, greater<Node>> pq;
+
+    Node start = {initial, x, y, calculateCost(initial), 0};
+
+    pq.push(start);
+
+    set<vector<vector<int>>> visited;
+
+    while (!pq.empty()) {
+        Node current = pq.top();
+        pq.pop();
+
+        printMatrix(current.mat);
+
+        if (current.cost == 0) {
+            cout << "Goal State Reached!" << endl;
+            return;
+        }
+
+        visited.insert(current.mat);
+
+        for (int i = 0; i < 4; i++) {
+            int newX = current.x + dx[i];
+            int newY = current.y + dy[i];
+
+            if (isSafe(newX, newY)) {
+                vector<vector<int>> newMat = current.mat;
+
+                swap(newMat[current.x][current.y],
+                     newMat[newX][newY]);
+
+                if (visited.find(newMat) == visited.end()) {
+                    Node child = {
+                        newMat,
+                        newX,
+                        newY,
+                        calculateCost(newMat),
+                        current.level + 1
+                    };
+
+                    pq.push(child);
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    vector<vector<int>> initial = {
+        {1, 2, 3},
+        {4, 0, 6},
+        {7, 5, 8}
+    };
+
+    solve(initial, 1, 1);
+
+    return 0;
+}
