@@ -1,0 +1,88 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int V = 4;
+
+bool isSafe(int node,
+            vector<vector<int>>& graph,
+            vector<int>& color,
+            int col) {
+
+    for (int k = 0; k < V; k++) {
+
+        if (graph[node][k] == 1 &&
+            color[k] == col) {
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool solveGraphColoring(int node,
+                        vector<vector<int>>& graph,
+                        int m,
+                        vector<int>& color) {
+
+    if (node == V)
+        return true;
+
+    for (int col = 1; col <= m; col++) {
+
+        if (isSafe(node, graph, color, col)) {
+
+            color[node] = col;
+
+            if (solveGraphColoring(node + 1,
+                                   graph,
+                                   m,
+                                   color))
+                return true;
+
+            // Backtracking
+            color[node] = 0;
+        }
+    }
+
+    return false;
+}
+
+int main() {
+
+    vector<vector<int>> graph = {
+        {0, 1, 1, 1},
+        {1, 0, 1, 0},
+        {1, 1, 0, 1},
+        {1, 0, 1, 0}
+    };
+
+    int m = 3;
+
+    vector<int> color(V, 0);
+
+    if (solveGraphColoring(0,
+                           graph,
+                           m,
+                           color)) {
+
+        cout << "Solution Exists:\n";
+
+        for (int i = 0; i < V; i++) {
+
+            cout << "Vertex "
+                 << i
+                 << " ---> Color "
+                 << color[i]
+                 << endl;
+        }
+
+    } else {
+
+        cout << "No Solution Exists";
+    }
+
+    return 0;
+}
