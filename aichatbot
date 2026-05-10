@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+// Convert string to lowercase
+string toLower(string str) {
+
+    transform(str.begin(),
+              str.end(),
+              str.begin(),
+              ::tolower);
+
+    return str;
+}
+
+int main() {
+
+    string input;
+
+    cout << "===== AI Chatbot =====\n";
+    cout << "Type 'exit' to stop chatting.\n\n";
+
+    while (true) {
+
+        cout << "You: ";
+        getline(cin, input);
+
+        input = toLower(input);
+
+        if (input == "exit") {
+
+            cout << "Bot: Chat ended successfully.\n";
+            break;
+        }
+
+        else if (input.find("hello") != string::npos ||
+                 input.find("hi") != string::npos) {
+
+            cout << "Bot: Hello! Welcome to our service.\n";
+        }
+
+        else if (input.find("product") != string::npos) {
+
+            cout << "Bot: We sell laptops, mobiles, and smart devices.\n";
+        }
+
+        else if (input.find("service") != string::npos) {
+
+            cout << "Bot: We provide 24x7 customer support services.\n";
+        }
+
+        else if (input.find("price") != string::npos ||
+                 input.find("cost") != string::npos) {
+
+            cout << "Bot: Product prices vary depending on the model.\n";
+        }
+
+        else if (input.find("thank") != string::npos) {
+
+            cout << "Bot: You're welcome!\n";
+        }
+
+        else {
+
+            cout << "Bot: Sorry, I could not understand your query.\n";
+        }
+    }
+
+    return 0;
+}
