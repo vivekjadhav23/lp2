@@ -1,0 +1,102 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+struct Node {
+    int x, y;
+    int g, h;
+
+    int f() const {
+        return g + h;
+    }
+
+    bool operator>(const Node& other) const {
+        return f() > other.f();
+    }
+};
+
+int ROW = 5;
+int COL = 5;
+
+vector<vector<int>> grid = {
+    {0, 0, 0, 0, 0},
+    {1, 1, 0, 1, 0},
+    {0, 0, 0, 1, 0},
+    {0, 1, 1, 0, 0},
+    {0, 0, 0, 0, 0}
+};
+
+int dx[] = {-1, 1, 0, 0};
+int dy[] = {0, 0, -1, 1};
+
+bool isValid(int x, int y) {
+    return (x >= 0 && x < ROW &&
+            y >= 0 && y < COL &&
+            grid[x][y] == 0);
+}
+
+int heuristic(int x, int y, int goalX, int goalY) {
+    return abs(x - goalX) + abs(y - goalY);
+}
+
+void aStar(int startX, int startY, int goalX, int goalY) {
+
+    priority_queue<Node, vector<Node>, greater<Node>> pq;
+
+    vector<vector<bool>> visited(ROW,
+                                 vector<bool>(COL, false));
+
+    pq.push({startX, startY, 0,
+             heuristic(startX, startY, goalX, goalY)});
+
+    while (!pq.empty()) {
+        Node current = pq.top();
+        pq.pop();
+
+        int x = current.x;
+        int y = current.y;
+
+        if (visited[x][y])
+            continue;
+
+        visited[x][y] = true;
+
+        cout << "(" << x << "," << y << ") ";
+
+        if (x == goalX && y == goalY) {
+            cout << "\nGoal Reached!" << endl;
+            return;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+
+            if (isValid(newX, newY) &&
+                !visited[newX][newY]) {
+
+                pq.push({
+                    newX,
+                    newY,
+                    current.g + 1,
+                    heuristic(newX, newY, goalX, goalY)
+                });
+            }
+        }
+    }
+
+    cout << "No Path Found!" << endl;
+}
+
+int main() {
+
+    int startX = 0, startY = 0;
+    int goalX = 4, goalY = 4;
+
+    aStar(startX, startY, goalX, goalY);
+
+    return 0;
+}
