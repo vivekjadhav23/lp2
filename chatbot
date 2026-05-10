@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+
+    string userInput;
+
+    cout << "===== Customer Support Chatbot =====\n";
+    cout << "Type 'exit' to end chat.\n\n";
+
+    while (true) {
+
+        cout << "You: ";
+        getline(cin, userInput);
+
+        if (userInput == "exit") {
+
+            cout << "Chatbot: Thank you!\n";
+            break;
+        }
+
+        else if (userInput == "hello" ||
+                 userInput == "hi") {
+
+            cout << "Chatbot: Hello! How can I help you?\n";
+        }
+
+        else if (userInput == "product") {
+
+            cout << "Chatbot: We provide laptops, mobiles, and accessories.\n";
+        }
+
+        else if (userInput == "service") {
+
+            cout << "Chatbot: We offer repair and maintenance services.\n";
+        }
+
+        else if (userInput == "price") {
+
+            cout << "Chatbot: Prices depend on the selected product.\n";
+        }
+
+        else if (userInput == "bye") {
+
+            cout << "Chatbot: Goodbye! Have a nice day.\n";
+            break;
+        }
+
+        else {
+
+            cout << "Chatbot: Sorry, I don't understand.\n";
+        }
+    }
+
+    return 0;
+}
